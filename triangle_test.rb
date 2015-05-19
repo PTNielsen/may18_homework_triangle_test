@@ -11,19 +11,40 @@ class Triangle
     @side3 = side3
   end
 
-def kind
-  if @side1 != @side2 and @side1 != @side3 and @side2 != @side3
-    return :scalene
-  elsif @side1 == @side2 and @side1 == @side3
-    return :equilateral
-  else
-    return :isosceles
-  end  
+#  def is_triangle?(side1,side2,side3)    ** Was working on the Hard Mode but shifted attention to Travis **
+#    side = Array.new
+#    side = [side1,side2,side3]
+#    side.each do |n|
+#      if |n|is_a?(Integer)
+#      else
+#        return :invalid
+#      end
+#      if |n| <= 0
+#        return :invalid
+#      end
+#  end
 
-end
+  def kind
+    if @side1 <= 0 || @side2 <= 0 || @side3 <= 0
+      return :invalid
+    else
+      if @side1 != @side2 && @side1 != @side3 && @side2 != @side3
+        return :scalene
+      elsif @side1 == @side2 && @side1 == @side3
+        return :equilateral
+      else
+        return :isosceles
+      end  
+    end
+  end
 
-def perimeter
-  return @side1 + @side2 + @side3
+  def perimeter
+      if @side1 > 0 && @side2 > 0 && @side3 > 0
+        return @side1 + @side2 + @side3
+      else
+        return :invalid
+      end
+  end
 end
 
 class TestMeme < Minitest::Test
@@ -56,5 +77,19 @@ class TestMeme < Minitest::Test
     t = Triangle.new(10,20,30)
     assert_equal 60, t.perimeter
   end
-end
+
+  def test_zero_perimeter
+   t = Triangle.new(0,1,2)
+    assert_equal :invalid, t.perimeter
+  end
+
+  def test_negative
+    t = Triangle.new(-1,-2,-3)
+    assert_equal :invalid, t.kind
+  end
+
+#  def test_uhhhwhat
+#    t = Triangle.new("sometext",{foo: 2},:apple)
+#    assert_equal :invalid, t.kind
+#  end
 end
