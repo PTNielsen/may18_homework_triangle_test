@@ -2,48 +2,35 @@
 # 2. Run `ruby triangle_test.rb`. You should see 6 error messages.
 # 3. Implement the Triangle class until all 6 tests are passing.
 require "minitest/autorun"
-#require "pry"
+require "pry"
 
 class Triangle
+
   def initialize(side1,side2,side3)
-    @side1 = side1
-    @side2 = side2
-    @side3 = side3
+    [side1,side2,side3].each do |side|
+      unless side.is_a?(Integer) && side > 0
+        raise "#{side} is not a valid side value"
+      end
+    end
+    @side1, @side2, @side3 = side1, side2, side3
   end
 
-#  def is_triangle?(side1,side2,side3)    ** Was working on the Hard Mode but shifted attention to Travis **
-#    side = Array.new
-#    side = [side1,side2,side3]
-#    side.each do |n|
-#      if |n|is_a?(Integer)
-#      else
-#        return :invalid
-#      end
-#      if |n| <= 0
-#        return :invalid
-#      end
-#  end
-
   def kind
-    if @side1 <= 0 || @side2 <= 0 || @side3 <= 0
-      return :invalid
+    if @side1 != @side2 && @side1 != @side3 && @side2 != @side3
+      return :scalene
+    elsif @side1 == @side2 && @side1 == @side3
+      return :equilateral
     else
-      if @side1 != @side2 && @side1 != @side3 && @side2 != @side3
-        return :scalene
-      elsif @side1 == @side2 && @side1 == @side3
-        return :equilateral
-      else
-        return :isosceles
-      end  
+      return :isosceles
     end
   end
 
   def perimeter
-      if @side1 > 0 && @side2 > 0 && @side3 > 0
-        return @side1 + @side2 + @side3
-      else
-        return :invalid
-      end
+    if @side1 > 0 && @side2 > 0 && @side3 > 0
+      return @side1 + @side2 + @side3
+    else
+      return :invalid
+    end
   end
 end
 
@@ -79,17 +66,21 @@ class TestMeme < Minitest::Test
   end
 
   def test_zero_perimeter
-   t = Triangle.new(0,1,2)
-    assert_equal :invalid, t.perimeter
+    assert_raises RuntimeError do
+      Triangle.new 0,1,2
+    end
   end
 
   def test_negative
-    t = Triangle.new(-1,-2,-3)
-    assert_equal :invalid, t.kind
+    assert_raises RuntimeError do
+      Triangle.new -1,-2,-3
+    end
   end
 
-#  def test_uhhhwhat
-#    t = Triangle.new("sometext",{foo: 2},:apple)
-#    assert_equal :invalid, t.kind
-#  end
+  def test_uhhhwhat
+    assert_raises RuntimeError do
+      Triangle.new "some text", {foo: 2}, :apple
+    end
+  end
+
 end
